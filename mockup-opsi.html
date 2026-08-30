@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Efek Headline ArgoGPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#F4F9F6;padding:40px 20px;color:#15241C}
+  .page-head{text-align:center;margin-bottom:36px}
+  .page-head h1{font-size:26px;font-weight:800;color:#0F7A4E}
+  .page-head p{color:#5F6F66;margin-top:8px;font-size:14px;max-width:640px;margin-left:auto;margin-right:auto}
+  .stack{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+  .card{background:#fff;border:1px solid #E4EBE6;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(20,37,30,.06)}
+  .card .bar{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid #E4EBE6;background:#FBFDFC}
+  .card .bar .title{font-weight:700;font-size:14px}
+  .card .bar .cat{margin-left:auto;font-size:11px;font-weight:700;color:#0F7A4E;background:#E6F4ED;padding:4px 10px;border-radius:999px}
+  .card .stage{background:linear-gradient(180deg,#F4F9F6,#fff);min-height:200px;display:flex;align-items:center;justify-content:center;padding:36px 24px;text-align:center;position:relative;overflow:hidden}
+  .hl{font-size:clamp(26px,3.4vw,40px);font-weight:800;line-height:1.35;letter-spacing:-.5px}
+  .hl b{display:block;font-weight:800}
+  .card .desc{padding:16px 20px;font-size:13.5px;color:#5F6F66;line-height:1.6;border-top:1px dashed #E4EBE6}
+
+  /* OPSI 1: highlight stabilo */
+  .o1 .mark{background:linear-gradient(180deg,transparent 62%,rgba(22,155,98,.28) 62%);padding:0 4px;border-radius:4px;display:inline-block}
+  /* marker miring */
+  .o1b .mark{background:rgba(22,155,98,.22);padding:2px 8px;border-radius:6px;display:inline-block;transform:skew(-4deg);box-shadow:inset 0 -3px 0 rgba(22,155,98,.25)}
+
+  /* OPSI 2: badge di atas */
+  .o2 .badges{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+  .o2 .bchip{font-size:11px;font-weight:700;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #D9E6DE;color:#0F7A4E;display:inline-flex;align-items:center;gap:5px}
+  .o2 .bchip.amber{background:#FDF3E3;border-color:#F0D9AE;color:#B96405}
+
+  /* OPSI 3: emoji/ikon di dalam kata */
+  .o3 .w{display:inline-flex;align-items:center;gap:2px}
+  .o3 .e{font-size:.9em;display:inline-block;animation:boot 2s infinite}
+  @keyframes boot{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+  /* OPSI 4: animated gradient + cursor */
+  .o4 .g{background:linear-gradient(90deg,#0F7A4E,#169B62,#3FA77A,#169B62,#0F7A4E);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gs 6s ease infinite}
+  @keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .o4 .cursor{display:inline-block;width:3px;height:1.1em;background:#169B62;margin-left:3px;animation:blink 1s step-end infinite;vertical-align:-.15em}
+  @keyframes blink{50%{opacity:0}}
+
+  /* OPSI 5: garis dekoratif samping */
+  .o5 .hl{display:flex;align-items:center;gap:18px;justify-content:center}
+  .o5 .lg{flex:1;max-width:120px;height:1.5px;background:linear-gradient(90deg,transparent,rgba(22,155,98,.5));border-radius:2px}
+  .o5 .rg{flex:1;max-width:120px;height:1.5px;background:linear-gradient(270deg,transparent,rgba(22,155,98,.5));border-radius:2px}
+  .o5 .dots{margin-top:10px;letter-spacing:6px;color:#169B62;font-size:16px}
+
+  /* OPSI 6: outline/hollow */
+  .o6 .out{color:transparent;-webkit-text-stroke:1.6px #169B62;font-weight:800}
+
+  /* OPSI 7: stagger (sudah default) + hover */
+  .o7 .hl b{opacity:0;transform:translateY(16px);animation:rise .6s forwards}
+  .o7 .hl b:nth-child(1){animation-delay:.1s}.o7 .hl b:nth-child(2){animation-delay:.3s}.o7 .hl b:nth-child(3){animation-delay:.5s;color:#169B62}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* OPSI 8: angka watermark di belakang */
+  .o8 .stage::before{content:"KM";position:absolute;font-size:180px;font-weight:800;color:rgba(22,155,98,.07);top:50%;left:50%;transform:translate(-50%,-50%);letter-spacing:-5px;z-index:0}
+  .o8 .hl{position:relative;z-index:1}
+
+  /* OPSI 9: badge NEW */
+  .o9 .corner{position:absolute;top:16px;right:20px;background:#D97706;color:#fff;font-size:10px;font-weight:800;letter-spacing:.5px;padding:5px 10px;border-radius:999px;transform:rotate(3deg);box-shadow:0 4px 12px rgba(217,119,6,.3)}
+  .o9 .hl .ver{border:1.5px solid #169B62;color:#0F7A4E;font-size:.45em;font-weight:800;padding:2px 8px;border-radius:6px;vertical-align:middle;margin-left:6px;letter-spacing:.3px}
+
+  /* OPSI 10: sweep highlight */
+  .o10 .mark{position:relative;color:#15241C;display:inline-block}
+  .o10 .mark i{position:absolute;left:0;right:0;bottom:.05em;height:.28em;background:rgba(22,155,98,.45);z-index:-1;transform-origin:left;transform:scaleX(0);animation:sweep 1.2s .8s forwards ease}
+  @keyframes sweep{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>10 Mockup Efek Headline — ArgoGPS</h1>
+    <p>Semua pakai font yang sama (Plus Jakarta). Yang dibedakan: elemen & efek di sekitar headline biar lebih modern & stylis.</p>
+  </div>
+
+  <div class="stack">
+
+    <div class="card o1">
+      <div class="bar"><span class="title">Opsi 1 · Highlight Marker</span><span class="cat">Highlight / Stabilo</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="mark">Lebih Profesional.</span></b></h2></div>
+      <div class="desc">Kata "Lebih Profesional" dibungkus highlight hijau muda (efek marker/stabilo). Modern & fokus ke kata kunci.</div>
+    </div>
+
+    <div class="card o2">
+      <div class="bar"><span class="title">Opsi 2 · Badge di Atas Headline</span><span class="cat">Badge / Pill</span></div>
+      <div class="stage">
+        <div>
+          <div class="badges"><span class="bchip">✅ 100% Offline</span><span class="bchip">⚡ Tanpa Biaya Layanan</span><span class="bchip amber">🎖 Premium Rp45rb</span></div>
+          <h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional.</b></h2>
+        </div>
+      </div>
+      <div class="desc">Badge/pill kecil nempel di atas headline — langsung kasih info & kesan hidup tanpa baca paragraf dulu.</div>
+    </div>
+
+    <div class="card o3">
+      <div class="bar"><span class="title">Opsi 3 · Ikon/Emoji di Dalam Kata</span><span class="cat">Ikon Inline</span></div>
+      <div class="stage"><h2 class="hl"><b><span class="w">Ukur 📏 Jarak.</span></b><b><span class="w">Hitung 💰 Ongkir.</span></b><b><span class="w">Lebih 🚀 Profesional.</span></b></h2></div>
+      <div class="desc">Sisipkan ikon/emoji kecil di dalam kalimat yang bisa bob naik-turun pelan. Ramah & penuh karakter.</div>
+    </div>
+
+    <div class="card o4">
+      <div class="bar"><span class="title">Opsi 4 · Gradient Animated + Cursor</span><span class="cat">Gradient / Typing</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="g">Lebih Profesional.</span><span class="cursor"></span></b></h2></div>
+      <div class="desc">"Lebih Profesional" pakai gradient hijau yang bergerak pelan + cursor berkedip (kesan live/typing).</div>
+    </div>
+
+    <div class="card o5">
+      <div class="bar"><span class="title">Opsi 5 · Garis Dekoratif Samping</span><span class="cat">Garis / Divider</span></div>
+      <div class="stage">
+        <div>
+          <h2 class="hl"><span class="lg"></span><span><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional.</b></span><span class="rg"></span></h2>
+          <div class="dots">• • •</div>
+        </div>
+      </div>
+      <div class="desc">Garis tipis kiri-kanan + titik aksen di bawah. Khas website premium/editorial, terasa mahal & seimbang.</div>
+    </div>
+
+    <div class="card o6">
+      <div class="bar"><span class="title">Opsi 6 · Kata Outline (Hollow)</span><span class="cat">Outline / Stroke</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b class="out">Hitung Ongkir.</b><b>Lebih Profesional.</b></h2></div>
+      <div class="desc">Satu baris ("Hitung Ongkir.") dibuat hollow/outline (cuma garis tepi hijau). Efek trending di desain modern.</div>
+    </div>
+
+    <div class="card o7">
+      <div class="bar"><span class="title">Opsi 7 · Staggered Reveal Bertahap</span><span class="cat">Animasi Masuk</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional.</b></h2></div>
+      <div class="desc">Tiga baris muncul naik + fade satu-satu berurutan (ini yang sudah dipasang di hero). Dinamis saat halaman load.</div>
+    </div>
+
+    <div class="card o8">
+      <div class="bar"><span class="title">Opsi 8 · Angka Watermark di Belakang</span><span class="cat">Watermark / Backdrop</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional.</b></h2></div>
+      <div class="desc">Teks "KM" raksasa transparan di belakang headline sebagai backdrop — depth & kesan tematik (ukur jarak).</div>
+    </div>
+
+    <div class="card o9">
+      <div class="bar"><span class="title">Opsi 9 · Badge "NEW" / Versi</span><span class="cat">Label Status</span></div>
+      <div class="stage">
+        <span class="corner">V1.0</span>
+        <h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional <span class="ver">√ Akurat</span></b></h2>
+      </div>
+      <div class="desc">Badge kecil "V1.0" di pojok + tag "√ Akurat" nempel di kata terakhir. Kesan app terus berkembang & teruji.</div>
+    </div>
+
+    <div class="card o10">
+      <div class="bar"><span class="title">Opsi 10 · Sweep Highlight Saat Load</span><span class="cat">Motion Highlight</span></div>
+      <div class="stage"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="mark">Lebih Profesional.<i></i></span></b></h2></div>
+      <div class="desc">Saat load, highlight hijau "menyapu" dari kiri ke kanan di belakang kata kunci — fokus terarah ke akhiran.</div>
+    </div>
+
+  </div>
+</body>
+</html>

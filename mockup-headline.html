@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup Headline ArgoGPS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Inter:wght@400;700;800&family=Playfair+Display:wght@600;700;800&family=Sora:wght@400;600;700;800&family=Poppins:wght@400;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#F4F9F6;padding:40px 20px;color:#15241C}
+  .page-head{text-align:center;margin-bottom:36px}
+  .page-head h1{font-size:26px;font-weight:800;color:#0F7A4E}
+  .page-head p{color:#5F6F66;margin-top:8px;font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+  .card{background:#fff;border:1px solid #E4EBE6;border-radius:18px;padding:34px 28px;display:flex;flex-direction:column;gap:18px;box-shadow:0 10px 30px rgba(20,37,30,.06);transition:transform .2s}
+  .card:hover{transform:translateY(-3px)}
+  .card .tag{display:inline-block;align-self:flex-start;background:#E6F4ED;color:#0F7A4E;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+  .card .num{position:absolute}
+  .card .demo{background:#FBFDFC;border:1px solid #EEF3F0;border-radius:12px;padding:22px 18px;text-align:center;min-height:150px;display:flex;align-items:center;justify-content:center}
+  .demo .hl{font-size:34px;line-height:1.35;letter-spacing:-.5px}
+  .card .note{font-size:13px;color:#5F6F66;line-height:1.55;border-top:1px dashed #E4EBE6;padding-top:14px}
+
+  /* VARIAN 1: Plus Jakarta (default), bold, kata terakhir hijau */
+  .v1 .hl{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;text-align:left}
+  .v1 .hl b{display:block}
+  .v1 .hl .g{color:#169B62}
+
+  /* VARIAN 2: Inter, semua dark, kata akhir dengan underline custom */
+  .v2 .hl{font-family:'Inter',sans-serif;font-weight:800;text-align:left}
+  .v2 .hl b{display:block}
+  .v2 .hl .ul{color:#0F7A4E;position:relative;white-space:nowrap}
+  .v2 .hl .ul::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:8px;background:linear-gradient(90deg,#169B62,transparent);border-radius:4px}
+
+  /* VARIAN 3: Playfair serif elegan, italic kata akhir */
+  .v3 .hl{font-family:'Playfair Display',serif;font-weight:700;text-align:left;letter-spacing:-.3px}
+  .v3 .hl b{display:block}
+  .v3 .hl .it{font-style:italic;color:#0F7A4E}
+
+  /* VARIAN 4: Sora geometric, semua bold, aksen amber dot */
+  .v4 .hl{font-family:'Sora',sans-serif;font-weight:700;text-align:left}
+  .v4 .hl b{display:block}
+  .v4 .hl .dot{color:#D97706}
+
+  /* VARIAN 5: Space Grotesk, semua satu baris wrap, kata kunci hitam tebal + hijau */
+  .v5 .hl{font-family:'Space Grotesk',sans-serif;font-weight:700;text-align:left;letter-spacing:-.5px}
+  .v5 .hl b{display:block}
+  .v5 .hl .g{color:#169B62}
+
+  /* VARIAN 6: Poppins, rounded, dengan highlight background kata akhir */
+  .v6 .hl{font-family:'Poppins',sans-serif;font-weight:700;text-align:left}
+  .v6 .hl b{display:block}
+  .v6 .hl .hlg{background:linear-gradient(90deg,rgba(22,155,98,.18),rgba(22,155,98,.05));color:#0F7A4E;padding:0 6px;border-radius:8px;display:inline-block}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>6 Mockup Headline Hero ArgoGPS</h1>
+    <p>"Ukur Jarak. Hitung Ongkir. Lebih Profesional." — pilih yang paling pas</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card v1">
+      <span class="tag">Varian 1 · Plus Jakarta Sans</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="g">Lebih Profesional.</span></b></h2></div>
+      <p class="note">Font default + Jakarta Sans. Solid, bersih, mudah dibaca. Kata terakhir hijau brand. Paling aman & konsisten.</p>
+    </div>
+
+    <div class="card v2">
+      <span class="tag">Varian 2 · Inter + Underline</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="ul">Lebih Profesional.</span></b></h2></div>
+      <p class="note">Inter netral + garis bawah (underline) hijau bergradasi di kata terakhir. Modern, khas SaaS premium.</p>
+    </div>
+
+    <div class="card v3">
+      <span class="tag">Varian 3 · Playfair Serif Élégant</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="it">Lebih Profesional.</span></b></h2></div>
+      <p class="note">Serif mewah (Playfair) + italic. Terasa eksklusif & premium, cocok kalau mau kesan "kelas atas" bukan utilitarian.</p>
+    </div>
+
+    <div class="card v4">
+      <span class="tag">Varian 4 · Sora Geometric + Aksen</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b>Lebih Profesional<span class="dot">.</span></b></h2></div>
+      <p class="note">Sora geometric tegas. Titik terakhir pakai amber #D97706 sebagai aksen kecil yang menarik mata.</p>
+    </div>
+
+    <div class="card v5">
+      <span class="tag">Varian 5 · Space Grotesk Kompak</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="g">Lebih Profesional.</span></b></h2></div>
+      <p class="note">Space Grotesk modern-geometric, agak kompak & tinggi. Kesan teknologi/startup tech.</p>
+    </div>
+
+    <div class="card v6">
+      <span class="tag">Varian 6 · Poppins + Highlight</span>
+      <div class="demo"><h2 class="hl"><b>Ukur Jarak.</b><b>Hitung Ongkir.</b><b><span class="hlg">Lebih Profesional.</span></b></h2></div>
+      <p class="note">Poppins rounded friendly + background highlight hijau muda di kata terakhir (efek stabilo lembut). Ramah & hangat.</p>
+    </div>
+
+  </div>
+</body>
+</html>

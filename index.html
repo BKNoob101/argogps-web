@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArgoGPS — Odometer GPS & Kalkulator Ongkir untuk Kurir</title>
+<meta name="description" content="ArgoGPS membantu kurir dan usaha pengiriman mengukur jarak perjalanan, menghitung ongkir secara otomatis, serta membuat bukti perjalanan digital dengan mudah. Ringan, praktis, transparan, dan bisa digunakan offline.">
+<link rel="icon" type="image/png" href="/assets/icon-512.png">
+<meta property="og:title" content="ArgoGPS — Odometer GPS & Kalkulator Ongkir untuk Kurir">
+<meta property="og:description" content="Ukur Jarak. Hitung Ongkir. Lebih Profesional. Ringan · Praktis · Transparan · Bisa Digunakan Offline.">
+<meta property="og:image" content="/assets/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-soft:#F4F8F5;
+    --panel:#FFFFFF;
+    --panel2:#EDF4EF;
+    --ink:#14251E;
+    --mut:#5A6B63;
+    --brand:#1E7A4F;
+    --brand-deep:#145A39;
+    --brand-soft:#E4F1E9;
+    --amber:#D97706;
+    --line:#E4EBE6;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{font-family:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal[data-d="1"]{transition-delay:.08s}
+  .reveal[data-d="2"]{transition-delay:.16s}
+  .reveal[data-d="3"]{transition-delay:.24s}
+  @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:14.5px;text-decoration:none;cursor:pointer;border:1.5px solid transparent;transition:transform .25s var(--ease),box-shadow .25s,background .25s,color .25s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(0)}
+  .btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease)}
+  .btn:hover svg{transform:translateX(3px)}
+  .btn-green{background:var(--brand);color:#fff;box-shadow:0 8px 20px rgba(30,122,79,.24)}
+  .btn-green:hover{background:var(--brand-deep);box-shadow:0 12px 26px rgba(30,122,79,.32)}
+  .btn-outline{background:#fff;color:var(--brand-deep);border-color:var(--line)}
+  .btn-outline:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .btn-amber{background:var(--amber);color:#fff;box-shadow:0 8px 20px rgba(217,119,6,.24)}
+  .btn-amber:hover{background:#B96405}
+  .btn-lg{padding:15px 30px;font-size:15.5px}
+  .play-ico{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;flex-shrink:0}
+  .gp-badge{display:inline-flex;align-items:center;gap:12px;padding:10px 22px;border-radius:13px;text-decoration:none;transition:transform .25s var(--ease),box-shadow .25s;flex-shrink:0}
+  .gp-badge:hover{transform:translateY(-2px)}
+  .badge-dark{background:#0F0F12;color:#fff;box-shadow:0 10px 24px rgba(0,0,0,.22)}
+  .badge-dark:hover{box-shadow:0 16px 32px rgba(0,0,0,.28)}
+  .badge-light{background:#fff;color:#0F0F12;box-shadow:0 12px 28px rgba(0,0,0,.18)}
+  .badge-light:hover{box-shadow:0 16px 34px rgba(0,0,0,.24)}
+  .gp-ico{display:grid;place-items:center}
+  .gp-ico svg{width:34px;height:34px;display:block}
+  .gp-txt{display:flex;flex-direction:column;line-height:1.08;text-align:left}
+  .gp-txt em{font-style:normal;font-size:10.5px;font-weight:500;letter-spacing:.4px;opacity:.85;text-transform:uppercase}
+  .gp-txt strong{font-size:18px;font-weight:700;letter-spacing:-.2px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink)}
+  .logo img{width:36px;height:36px;border-radius:9px}
+  .logo b{color:var(--brand)}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:var(--mut);text-decoration:none;font-size:14.5px;font-weight:600;padding:9px 14px;border-radius:999px;transition:.25s}
+  .nav-links a:hover{color:var(--brand-deep);background:var(--brand-soft)}
+  .nav-right{display:flex;align-items:center;gap:10px}
+  .burger{display:none;width:42px;height:42px;border-radius:11px;border:1.5px solid var(--line);background:#fff;cursor:pointer;position:relative}
+  .burger span{position:absolute;left:11px;right:11px;height:2px;background:var(--ink);border-radius:2px;transition:.3s}
+  .burger span:nth-child(1){top:14px}.burger span:nth-child(2){top:20px}.burger span:nth-child(3){top:26px}
+  body.menu-open .burger span:nth-child(1){top:20px;transform:rotate(45deg)}
+  body.menu-open .burger span:nth-child(2){opacity:0}
+  body.menu-open .burger span:nth-child(3){top:20px;transform:rotate(-45deg)}
+  @media(max-width:960px){
+    .nav-links{position:fixed;top:72px;left:16px;right:16px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(20,37,30,.10);flex-direction:column;align-items:stretch;padding:12px;gap:2px;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.3s var(--ease)}
+    body.menu-open .nav-links{transform:none;opacity:1;pointer-events:auto}
+    .nav-links a{padding:13px 16px;border-radius:12px}
+    .nav-right .btn{display:none}
+    .burger{display:block}
+  }
+
+  /* hero */
+  .hero{padding:72px 0 48px;text-align:center;background:linear-gradient(180deg,#F4F9F6 0%,#FFFFFF 100%);position:relative;overflow:hidden}
+  .hero .wrap{position:relative;z-index:2}
+  .hero-blob{position:absolute;border-radius:50%;filter:blur(50px);opacity:.5;pointer-events:none;z-index:1}
+  .hero-blob.b1{width:420px;height:420px;background:rgba(22,155,98,.18);top:-140px;left:-100px;animation:blobFloat 14s ease-in-out infinite}
+  .hero-blob.b2{width:360px;height:360px;background:rgba(84,190,140,.16);bottom:-120px;right:-90px;animation:blobFloat 18s ease-in-out infinite reverse}
+  .hero-blob.b3{width:220px;height:220px;background:rgba(22,155,98,.10);top:40%;left:55%;animation:blobFloat 22s ease-in-out infinite 2s}
+  @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.08)}66%{transform:translate(-20px,20px) scale(.96)}}
+  .hero h1{font-size:clamp(31px,5vw,52px);line-height:1.14;font-weight:800;letter-spacing:-1px;margin:0 auto 18px;max-width:840px;position:relative}
+  .hl-line{display:block;opacity:0;transform:translateY(28px) scale(.96);animation:hlIn .8s var(--ease) forwards}
+  .hl-line.hl1{animation-delay:.05s}.hl-line.hl2{animation-delay:.25s}.hl-line.hl3{animation-delay:.45s}
+  @keyframes hlIn{to{opacity:1;transform:none}}
+  .hero h1 .accent{color:var(--brand)}
+  .hl-accent{background:linear-gradient(90deg,#0F7A4E,#169B62,#3FA77A,#169B62,#0F7A4E);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradShift 6s ease infinite}
+  @keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .hero .lead{font-size:clamp(16px,2vw,18.5px);color:var(--mut);max-width:700px;margin:0 auto 26px}
+  .hero-tags{display:flex;gap:10px 18px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;color:var(--brand-deep);font-weight:700;font-size:14px}
+  .hero-tags span{display:inline-flex;align-items:center;gap:7px}
+  .hero-tags .sep{color:var(--line);font-weight:400}
+  .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;margin-bottom:44px}
+  .float-ico{position:absolute;z-index:2;display:grid;place-items:center;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 10px 26px rgba(20,37,30,.12);animation:icoBob 5s ease-in-out infinite}
+  .float-ico svg{width:22px;height:22px;stroke:var(--brand);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .f-ico1{width:52px;height:52px;top:20%;left:8%}
+  .f-ico2{width:60px;height:60px;top:32%;right:7%;animation-delay:1.2s}
+  .f-ico3{width:46px;height:46px;bottom:14%;left:16%;animation-delay:2.1s}
+  .f-ico4{width:44px;height:44px;bottom:30%;right:14%;animation-delay:.6s}
+  .f-ico2 svg{width:26px;height:26px}
+  @keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  .hero-counter{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;box-shadow:0 8px 22px rgba(20,37,30,.08);font-weight:800;color:var(--brand-deep);font-size:13px;animation:icoBob 6s ease-in-out infinite}
+  .hero-counter svg{width:15px;height:15px;stroke:var(--brand);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .hc-top{margin-bottom:20px}
+  .device-preview{margin:0 auto;max-width:340px;position:relative;z-index:2}
+  .phone-pic{position:relative;border-radius:38px;background:linear-gradient(160deg,#2b2b2b,#1a1a1a);padding:10px;box-shadow:0 28px 70px rgba(20,37,30,.35),inset 0 0 0 1px rgba(255,255,255,.06)}
+  .phone-pic::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:22px;background:#1a1a1a;border-radius:0 0 16px 16px;z-index:2}
+  .phone-pic img{display:block;width:100%;border-radius:29px;background:#F5F0E8}
+  .phone-cap{margin-top:14px;text-align:center;font-size:13px;color:var(--mut);font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
+  .phone-cap span{color:#169B62;font-size:10px}
+
+  /* APK SLIDER */
+  .apk-slider{max-width:360px;margin:0 auto 40px}
+  .slider-main{position:relative}
+  .slider-track{position:relative;aspect-ratio:9/19.5;border-radius:40px;overflow:hidden}
+  .slider-slide{position:absolute;inset:0;opacity:0;transform:translateX(30px) scale(.97);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
+  .slider-slide.active{opacity:1;transform:none;pointer-events:auto}
+  .slider-slide .phone-pic{height:100%;display:flex;flex-direction:column}
+  .slider-slide .phone-pic img{flex:1;object-fit:cover;width:100%;border-radius:29px;background:#F5F0E8}
+  .slide-cap{margin-top:14px;text-align:center;font-size:13.5px;color:var(--brand-deep);font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px}
+  .slide-cap span{color:#169B62;font-size:10px}
+  .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:8px;align-items:start}
+  .gal-item{text-align:center}
+  .gal-phone{position:relative;max-width:250px;margin:0 auto;border-radius:28px;background:linear-gradient(160deg,#2b2b2b,#1a1a1a);padding:7px;box-shadow:0 18px 46px rgba(20,37,30,.25),inset 0 0 0 1px rgba(255,255,255,.05)}
+  .gal-phone::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:78px;height:16px;background:#1a1a1a;border-radius:0 0 12px 12px;z-index:2}
+  .gal-phone img{display:block;width:100%;border-radius:22px;background:#F5F0E8}
+  .gal-item figcaption{margin-top:14px}
+  .gal-item figcaption b{display:block;font-size:16px;color:var(--brand-deep);margin-bottom:3px}
+  .gal-item figcaption span{font-size:13px;color:var(--mut);line-height:1.5;display:block}
+  .phone-nav a .nav-label{font-size:8.5px;font-weight:700;color:#8C7A68}
+  .phone-nav a.active .nav-label{color:#5C4B3A}
+  .ps-caption{font-size:12px;color:var(--mut);margin-top:14px;font-weight:600;text-align:center}
+  @media(max-width:480px){.device-preview{max-width:320px;padding:6px}.phone-speedo{width:120px;height:120px}.phone-speedo .km{font-size:26px}.phone-body{padding:8px 10px 0}.float-ico{display:none}.hero-counter{font-size:12px;padding:6px 11px}}
+
+  /* sections */
+  .sec{padding:84px 0}
+  .sec.soft{background:var(--bg-soft)}
+  .sec-head{max-width:720px;margin:0 auto 48px;text-align:center}
+  .sec-head .eyebrow{display:inline-block;color:var(--brand);font-weight:800;font-size:12.5px;text-transform:uppercase;letter-spacing:1.8px;margin-bottom:12px}
+  .sec-head h2{font-size:clamp(25px,3.4vw,34px);font-weight:800;letter-spacing:-.8px;line-height:1.2;margin-bottom:12px}
+  .sec-head p{color:var(--mut);font-size:16px}
+
+  /* pain */
+  .pains{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media(max-width:960px){.gal-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.gal-grid{grid-template-columns:1fr}}
+  @media(max-width:960px){.pains{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.pains{grid-template-columns:1fr}}
+  .pain{background:#fff;border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:14px;padding:24px}
+  .pain .ico{width:44px;height:44px;border-radius:11px;background:#FDF3E3;display:grid;place-items:center;margin-bottom:14px}
+  .pain .ico svg{width:22px;height:22px;stroke:var(--amber);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .pain b{display:block;font-size:15.5px;margin-bottom:5px}
+  .pain p{font-size:13.5px;color:var(--mut)}
+
+  /* feature cards */
+  .grid{display:grid;gap:20px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:960px){.g3{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+  @media(max-width:620px){.g3{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 16px 38px rgba(20,37,30,.08);border-color:#C6DFCE}
+  .card .ico{width:48px;height:48px;border-radius:13px;background:var(--brand-soft);display:grid;place-items:center;margin-bottom:16px}
+  .card .ico svg{width:24px;height:24px;stroke:var(--brand-deep);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .card h3{font-size:16.5px;font-weight:800;margin-bottom:7px}
+  .card p{font-size:14px;color:var(--mut)}
+
+  /* audience */
+  .aud{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:960px){.aud{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.aud{grid-template-columns:1fr}}
+  .audit{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center;transition:.3s var(--ease)}
+  .audit:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(20,37,30,.08)}
+  .audit .aico{width:54px;height:54px;border-radius:16px;background:var(--brand-soft);display:grid;place-items:center;margin:0 auto 14px}
+  .audit .aico svg{width:27px;height:27px;stroke:var(--brand-deep);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .audit b{display:block;font-size:15.5px;margin-bottom:5px}
+  .audit p{font-size:13px;color:var(--mut)}
+
+  /* tariff example strip */
+  .fare-strip{background:linear-gradient(135deg,#145A39,#1E7A4F);border-radius:22px;padding:34px 30px;color:#fff;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;align-items:center}
+  @media(max-width:880px){.fare-strip{grid-template-columns:repeat(2,1fr);padding:28px 22px}}
+  @media(max-width:480px){.fare-strip{grid-template-columns:1fr}}
+  .fare-strip .ft{text-align:center}
+  .fare-strip .ft .lbl{font-size:11.5px;font-weight:700;color:#BFDCC9;text-transform:uppercase;letter-spacing:.6px}
+  .fare-strip .ft .v{font-size:22px;font-weight:800;margin-top:4px;letter-spacing:-.4px}
+  .fare-strip .ft .sub{font-size:11.5px;color:#BFDCC9;margin-top:2px}
+  .fare-strip .ft .v .small{font-size:12px;font-weight:600;color:#BFDCC9}
+  .fare-note{font-size:13px;color:var(--mut);text-align:center;margin-top:18px;max-width:640px;margin-left:auto;margin-right:auto}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+  @media(max-width:960px){.steps{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:700px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:440px){.steps{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 18px;text-align:center;position:relative}
+  .step .num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-deep));color:#fff;font-weight:800;font-size:16px;display:grid;place-items:center;margin:0 auto 14px;box-shadow:0 8px 18px rgba(30,122,79,.24)}
+  .step b{display:block;font-size:15px;margin-bottom:5px}
+  .step p{font-size:13px;color:var(--mut)}
+
+  /* pricing */
+  .plans{display:flex;gap:24px;justify-content:center;align-items:stretch;flex-wrap:wrap}
+  .plan{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 32px;display:flex;flex-direction:column;width:340px;position:relative}
+  .plan.popular{border:2px solid var(--brand);box-shadow:0 20px 48px rgba(30,122,79,.14)}
+  .plan .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--amber);color:#fff;font-size:11px;font-weight:800;padding:5px 15px;border-radius:999px;letter-spacing:.5px;white-space:nowrap}
+  .plan .pname{font-size:15px;font-weight:800;color:var(--mut);margin-bottom:12px}
+  .plan .price{font-size:38px;font-weight:800;letter-spacing:-1.3px;line-height:1}
+  .plan .price small{font-size:13.5px;color:var(--mut);font-weight:600;letter-spacing:0}
+  .plan .psub{font-size:13.5px;color:var(--mut);margin:10px 0 20px}
+  .plan ul{list-style:none;flex:1;margin-bottom:24px}
+  .plan ul li{display:flex;gap:10px;align-items:flex-start;padding:6.5px 0;font-size:14.5px}
+  .plan ul li svg{width:17px;height:17px;stroke:var(--brand);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;margin-top:4px}
+  .plan .btn{width:100%}
+  .plan .note{font-size:11.5px;color:var(--mut);text-align:center;margin-top:14px}
+
+  /* faq */
+  .faq{max-width:780px;margin:0 auto}
+  details{border:1px solid var(--line);background:#fff;border-radius:14px;margin-bottom:11px;overflow:hidden}
+  summary{list-style:none;cursor:pointer;padding:18px 22px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none}
+  summary::-webkit-details-marker{display:none}
+  .fi{width:28px;height:28px;border-radius:50%;background:var(--brand-soft);color:var(--brand-deep);display:grid;place-items:center;flex-shrink:0;transition:transform .35s var(--ease),background .3s,color .3s}
+  .fi svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round}
+  details[open] .fi{transform:rotate(45deg);background:var(--brand-deep);color:#fff}
+  .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s var(--ease)}
+  details[open] .ans{grid-template-rows:1fr}
+  .ans-in{overflow:hidden}
+  .ans-in p{padding:0 22px 20px;color:var(--mut);font-size:14.5px}
+
+  /* final cta */
+  .final{background:linear-gradient(135deg,#145A39,#1E7A4F);border-radius:26px;padding:64px 34px;text-align:center;color:#fff;position:relative;overflow:hidden}
+  .final::before{content:"";position:absolute;width:380px;height:380px;border:1.5px solid rgba(255,255,255,.1);border-radius:50%;left:-140px;bottom:-190px}
+  .final::after{content:"";position:absolute;width:560px;height:560px;border:1.5px solid rgba(255,255,255,.06);border-radius:50%;left:-260px;bottom:-290px}
+  .final h2{font-size:clamp(25px,3.4vw,34px);font-weight:800;letter-spacing:-.8px;margin-bottom:14px;position:relative}
+  .final p{font-size:16px;opacity:.92;max-width:540px;margin:0 auto 28px;position:relative}
+  .final .btn{background:#fff;color:var(--brand-deep);box-shadow:0 12px 28px rgba(0,0,0,.18);position:relative}
+  .final .btn:hover{transform:translateY(-2px)}
+  .final .small{margin-top:18px;font-size:12.5px;opacity:.7;position:relative}
+
+  /* footer */
+  footer{background:#10241C;color:#A9C2B7;padding:64px 0 28px;margin-top:90px}
+  footer .fcols{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:34px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.09)}
+  @media(max-width:860px){footer .fcols{grid-template-columns:1fr 1fr;gap:26px}}
+  .fbrand{display:flex;align-items:center;gap:11px;color:#fff;font-weight:800;font-size:17px;margin-bottom:12px}
+  .fbrand img{width:32px;height:32px;border-radius:8px}
+  .fbrand b{color:#8CD4A9}
+  .fdesc{font-size:13.5px;max-width:300px;margin-bottom:14px}
+  .ftags{font-size:13px;color:#CBDCD3;font-weight:700;margin-bottom:16px}
+  footer h4{color:#fff;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:13px}
+  footer a.f-link{display:block;color:#A9C2B7;text-decoration:none;font-size:14px;padding:4px 0;transition:.25s}
+  footer a.f-link:hover{color:#fff;transform:translateX(3px)}
+  .fcontact{font-size:13.5px}
+  .fcontact a{color:#CBDCD3;text-decoration:none;font-weight:600}
+  .fbase{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:22px;font-size:13px;color:#7C988D}
+  .fbase a{color:#A9C2B7;text-decoration:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#"><img src="/assets/icon-512.png" alt="ArgoGPS">Argo<b>GPS</b></a>
+    <nav class="nav-links" id="menu">
+      <a href="#masalah">Masalah</a>
+      <a href="#solusi">Solusi</a>
+      <a href="#cara">Cara Kerja</a>
+      <a href="#harga">Harga</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-right">
+      <a class="btn btn-green" href="#download">Download</a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob b1"></div>
+  <div class="hero-blob b2"></div>
+  <div class="hero-blob b3"></div>
+  <div class="float-ico f-ico1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+  <div class="float-ico f-ico2"><svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+  <div class="float-ico f-ico3"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div>
+  <div class="float-ico f-ico4"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+  <div class="wrap">
+    <div class="hero-counter hc-top"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="ctrKm">0 km</span>&nbsp;·&nbsp;<svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span id="ctrRp">Rp 0</span></div>
+    <h1 class="wild">
+      <span class="hl-line hl1">Ukur Jarak.</span>
+      <span class="hl-line hl2">Hitung Ongkir.</span>
+      <span class="hl-line hl3"><span class="hl-accent">Lebih Profesional.</span></span>
+    </h1>
+    <p class="lead reveal in" data-d="1">ArgoGPS membantu kurir dan usaha pengiriman mengukur jarak perjalanan, menghitung ongkir secara otomatis, serta membuat bukti perjalanan digital dengan mudah.</p>
+    <div class="hero-tags reveal in" data-d="2">
+      <span>Ringan</span><span class="sep">•</span><span>Praktis</span><span class="sep">•</span><span>Transparan</span><span class="sep">•</span><span>Bisa Digunakan Offline</span>
+    </div>
+
+    <!-- SLIDER APK (slideshow, klik thumbnail utk berhenti & pindah) -->
+    <div class="apk-slider reveal in" id="apkSlider" data-d="3">
+      <div class="slider-main">
+        <div class="slider-track">
+          <div class="slider-slide active">
+            <div class="phone-pic"><img src="assets/screens/home-polished.png" alt="Tampilan utama ArgoGPS — odometer & kalkulator ongkir" loading="lazy"></div>
+            <div class="slide-cap"><span>●</span> Halaman Utama — Odometer & Kalkulator Ongkir</div>
+          </div>
+          <div class="slider-slide">
+            <div class="phone-pic"><img src="assets/screens/tagihan-polished.png" alt="Ringkasan trip dan rincian tagihan ArgoGPS" loading="lazy"></div>
+            <div class="slide-cap"><span>●</span> Tagihan — Ringkasan Trip & Rincian Belanja</div>
+          </div>
+          <div class="slider-slide">
+            <div class="phone-pic"><img src="assets/screens/riwayat-polished.png" alt="Riwayat perjalanan dan total pendapatan ArgoGPS" loading="lazy"></div>
+            <div class="slide-cap"><span>●</span> Riwayat — Total Pendapatan & Daftar Perjalanan</div>
+          </div>
+          <div class="slider-slide">
+            <div class="phone-pic"><img src="assets/screens/setelan-polished.png" alt="Pengaturan profil, tema, tarif, struk, riwayat aplikasi ArgoGPS" loading="lazy"></div>
+            <div class="slide-cap"><span>●</span> Pengaturan — Profil, Tema, Tarif & Struk</div>
+          </div>
+        </div>
+      </div>
+      <!-- Hanya 1 tampilan besar, slideshow ganti otomatis -->
+    </div>
+
+    <div class="hero-cta reveal in" data-d="4">
+      <a class="gp-badge badge-dark" href="#download" aria-label="Download ArgoGPS di Google Play">
+        <span class="gp-ico"><svg viewBox="0 0 24 24"><path fill="#00D0FF" d="M3.6 2.2C3 2.6 2.6 3.3 2.6 4.2v15.6c0 .9.4 1.6 1 2L12.9 12z"/><path fill="#00E676" d="M12.9 12l3.1-3.1-10.3-6C5 2.3 4.2 2.6 3.6 2.2L12.9 12z"/><path fill="#FFD500" d="M12.9 12l-9.4 9.4c.4.4 1 .6 1.5.5l11.1-6.3L12.9 12z"/><path fill="#FF3B30" d="M19.8 10.2 12.9 7l3.1 5-7.3 4.2 11.1-6.4c1.3-.7 1.3-1.7 0-2.6z"/></svg></span>
+        <span class="gp-txt"><em>GET IT ON</em><strong>Google Play</strong></span>
+      </a>
+      <a class="btn btn-outline btn-lg" href="#fitur">Lihat Fitur</a>
+    </div>
+  </div>
+</section>
+
+<!-- MASALAH -->
+<section class="sec soft" id="masalah">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Masalah</div>
+      <h2>Masih Menghitung Ongkir Secara Manual?</h2>
+      <p>Mengelola pengiriman setiap hari tidak harus merepotkan. ArgoGPS membantu Anda mengukur jarak, menghitung ongkir, dan mencatat perjalanan secara lebih cepat dan terorganisir.</p>
+    </div>
+    <div class="pains">
+      <div class="pain reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><b>Jarak Masih Diperkirakan</b><p>Perhitungan berdasarkan perkiraan jarak dapat menimbulkan selisih ongkir. ArgoGPS mengukur jarak berdasarkan data GPS selama perjalanan.</p></div>
+      <div class="pain reveal" data-d="1"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><b>Ongkir Masih Dihitung Manual</b><p>Tidak perlu menghitung tarif kilometer satu per satu. ArgoGPS menghitung ongkir secara otomatis berdasarkan skema tarif yang Anda tentukan.</p></div>
+      <div class="pain reveal" data-d="2"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><b>Bukti Perjalanan Kurang Profesional</b><p>Buat bukti perjalanan dalam format digital yang rapi dan mudah dibagikan kepada pelanggan.</p></div>
+      <div class="pain reveal" data-d="3"><div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V10M12 20V4M18 20v-6"/></svg></div><b>Riwayat Perjalanan Tidak Terorganisir</b><p>Simpan riwayat perjalanan langsung di perangkat sehingga pencatatan pengiriman menjadi lebih mudah dan teratur.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUSI -->
+<section class="sec" id="solusi">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Solusi</div>
+      <h2>Satu Aplikasi untuk Mengelola Perjalanan Kurir</h2>
+      <p>ArgoGPS dirancang untuk membantu kurir bekerja lebih cepat, menghitung ongkir dengan lebih konsisten, dan memberikan bukti perjalanan yang profesional.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Odometer GPS</h3><p>Ukur jarak perjalanan secara otomatis menggunakan data GPS dengan sistem penyaringan untuk membantu mengurangi kesalahan akibat gangguan sinyal.</p></div>
+      <div class="card reveal" data-d="1"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Kalkulator Ongkir Fleksibel</h3><p>Tentukan tarif dasar dan tarif per kilometer sesuai kebutuhan bisnis Anda. Ongkir dihitung otomatis berdasarkan jarak perjalanan.</p></div>
+      <div class="card reveal" data-d="2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg></div><h3>Biaya Tambahan</h3><p>Tambahkan biaya tambahan sesuai kebutuhan, seperti perjalanan malam, kondisi hujan, multi-outlet, atau layanan khusus lainnya.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><h3>Riwayat Perjalanan</h3><p>Simpan riwayat perjalanan langsung di perangkat sehingga Anda dapat melihat dan mengelola data pengiriman dengan lebih praktis.</p></div>
+      <div class="card reveal" data-d="1"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div><h3>Bukti Perjalanan Digital</h3><p>Buat bukti perjalanan yang rapi dan profesional dalam format gambar yang siap dibagikan kepada pelanggan.</p></div>
+      <div class="card reveal" data-d="2"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div><h3>Bagikan ke WhatsApp</h3><p>Kirim bukti perjalanan kepada pelanggan dengan cepat melalui WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERI TAMPILAN APLIKASI -->
+<section class="sec" id="galeri">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Tampilan Aplikasi</div>
+      <h2>Kenali Tampilan ArgoGPS</h2>
+      <p>Antarmuka yang ringan, mudah dipahami, dan nyaman digunakan untuk pencatatan perjalanan kurir.</p>
+    </div>
+    <div class="gal-grid">
+      <figure class="gal-item reveal"><div class="gal-phone"><img src="assets/screens/home-polished.png" alt="Halaman utama ArgoGPS — odometer GPS, kalkulator ongkir, dan status perjalanan" loading="lazy"></div><figcaption><b>Halaman Utama</b><span>Odometer GPS, kalkulator ongkir, dan tombol geser untuk mulai.</span></figcaption></figure>
+      <figure class="gal-item reveal" data-d="1"><div class="gal-phone"><img src="assets/screens/tagihan-polished.png" alt="Halaman tagihan ArgoGPS — ringkasan trip dan rincian tagihan" loading="lazy"></div><figcaption><b>Tagihan</b><span>Ringkasan trip, rincian belanja, dan total akhir.</span></figcaption></figure>
+      <figure class="gal-item reveal" data-d="2"><div class="gal-phone"><img src="assets/screens/riwayat-polished.png" alt="Halaman riwayat perjalanan ArgoGPS — total pendapatan dan daftar trip" loading="lazy"></div><figcaption><b>Riwayat Perjalanan</b><span>Total pendapatan dan daftar perjalanan yang tersimpan di perangkat.</span></figcaption></figure>
+      <figure class="gal-item reveal" data-d="3"><div class="gal-phone"><img src="assets/screens/setelan-polished.png" alt="Halaman pengaturan ArgoGPS — profil, tema, tarif, struk, riwayat, aplikasi" loading="lazy"></div><figcaption><b>Pengaturan</b><span>Atur profil, tema, tarif, struk, riwayat, dan info aplikasi.</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- KEBUTUHAN -->
+<section class="sec soft" id="fitur">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Target Pengguna</div>
+      <h2>Dirancang untuk Berbagai Kebutuhan Pengiriman</h2>
+      <p>ArgoGPS dapat digunakan oleh siapa saja yang membutuhkan pencatatan jarak dan perhitungan ongkir secara praktis.</p>
+    </div>
+    <div class="aud">
+      <div class="audit reveal"><div class="aico"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><b>Kurir Mandiri</b><p>Cocok untuk kurir yang menerima dan mengantarkan pesanan secara mandiri.</p></div>
+      <div class="audit reveal" data-d="1"><div class="aico"><svg viewBox="0 0 24 24"><rect x="1" y="5" width="14" height="10" rx="2"/><path d="M15 9h4l3 3v3h-7zM5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg></div><b>Kurir Ekspedisi</b><p>Membantu mencatat perjalanan dan menghitung biaya berdasarkan jarak.</p></div>
+      <div class="audit reveal" data-d="2"><div class="aico"><svg viewBox="0 0 24 24"><circle cx="12" cy="6" r="2.5"/><path d="M12 8.5V21M8 11l4-2.5 4 2.5"/></svg></div><b>Driver Online</b><p>Gunakan odometer GPS untuk membantu mencatat jarak perjalanan.</p></div>
+      <div class="audit reveal"><div class="aico"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><b>Jasa Titip</b><p>Memudahkan perhitungan biaya perjalanan untuk layanan jastip.</p></div>
+      <div class="audit reveal" data-d="1"><div class="aico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><b>Kurir Toko & UMKM</b><p>Solusi praktis untuk toko dan UMKM yang memiliki layanan pengantaran sendiri.</p></div>
+      <div class="audit reveal" data-d="2"><div class="aico"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 11h.01M15 11h.01"/></svg></div><b>Usaha Pengiriman Lokal</b><p>Kelola pencatatan jarak dan perhitungan ongkir dengan sistem yang lebih terstruktur.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKEMA TARIF -->
+<section class="sec" id="skema">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Skema Tarif</div>
+      <h2>Contoh Skema Perhitungan Ongkir</h2>
+      <p>ArgoGPS menggunakan skema tarif yang fleksibel dan dapat disesuaikan dengan kebutuhan masing-masing kurir atau bisnis.</p>
+    </div>
+    <div class="fare-strip reveal">
+      <div class="ft"><div class="lbl">Tarif Dasar</div><div class="v">Rp7.000</div><div class="sub">per perjalanan</div></div>
+      <div class="ft"><div class="lbl">KM 2 – 5</div><div class="v">Rp1.700<span class="small"> /km</span></div><div class="sub">tarif tier 1</div></div>
+      <div class="ft"><div class="lbl">KM 6+</div><div class="v">Rp2.000<span class="small"> /km</span></div><div class="sub">tarif tier 2</div></div>
+      <div class="ft"><div class="lbl">Biaya Tambahan</div><div class="v">Rp2.000</div><div class="sub">malam · hujan · multi-outlet</div></div>
+    </div>
+    <p class="fare-note reveal">Catatan: Tarif di atas hanya contoh. Anda dapat menyesuaikan skema tarif sesuai kebutuhan.</p>
+  </div>
+</section>
+
+<!-- CARA KERJA -->
+<section class="sec soft" id="cara">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Cara Kerja</div>
+      <h2>Cara Kerja ArgoGPS</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><b>Mulai Perjalanan</b><p>Buka ArgoGPS dan mulai pencatatan perjalanan.</p></div>
+      <div class="step reveal" data-d="1"><div class="num">2</div><b>GPS Mengukur Jarak</b><p>ArgoGPS mencatat jarak perjalanan berdasarkan data GPS.</p></div>
+      <div class="step reveal" data-d="2"><div class="num">3</div><b>Ongkir Dihitung Otomatis</b><p>Sistem menghitung ongkir berdasarkan tarif yang telah Anda tentukan.</p></div>
+      <div class="step reveal" data-d="3"><div class="num">4</div><b>Buat Bukti Perjalanan</b><p>Setelah perjalanan selesai, buat bukti perjalanan digital.</p></div>
+      <div class="step reveal" data-d="4"><div class="num">5</div><b>Bagikan kepada Pelanggan</b><p>Kirim bukti perjalanan melalui WhatsApp atau media lainnya.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HARGA -->
+<section class="sec" id="harga">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Harga</div>
+      <h2>Pilih Paket Sesuai Kebutuhan Anda</h2>
+      <p>Mulai menggunakan ArgoGPS secara gratis. Tingkatkan ke Premium untuk mendapatkan fitur dan personalisasi yang lebih lengkap.</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="pname">GRATIS</div>
+        <div class="price">Rp0</div>
+        <div class="psub">Untuk kurir yang ingin mulai mencatat perjalanan secara digital.</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Odometer GPS</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Perhitungan jarak</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Kalkulator ongkir</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Riwayat perjalanan</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Bukti perjalanan digital</li>
+        </ul>
+        <a class="btn btn-outline" href="#download">Mulai Gratis</a>
+      </div>
+      <div class="plan popular reveal" data-d="1">
+        <div class="badge">PALING POPULER</div>
+        <div class="pname">PREMIUM</div>
+        <div class="price">Rp45rb <small>/ bulan</small></div>
+        <div class="psub">Untuk kurir profesional dan usaha pengiriman yang membutuhkan fitur lebih lengkap.</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Semua fitur Gratis</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Pengaturan tarif lebih fleksibel</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Biaya tambahan</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Personalisasi bukti perjalanan</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Fitur Premium lainnya</li>
+          <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Dukungan pengembangan fitur</li>
+        </ul>
+        <a class="btn btn-amber" href="#download">Upgrade ke Premium</a>
+        <div class="note">Langganan dikelola melalui Google Play</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec soft" id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Pertanyaan yang Sering Diajukan</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal"><summary>Apakah ArgoGPS bisa digunakan tanpa internet? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. Pengukuran jarak, perhitungan ongkir, dan pembuatan bukti perjalanan dapat dilakukan secara offline. Koneksi internet diperlukan untuk fitur tertentu yang membutuhkan layanan online, seperti pengiriman melalui WhatsApp dan layanan peta tertentu.</p></div></div></details>
+      <details class="reveal"><summary>Apakah tarif ongkir bisa disesuaikan? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. ArgoGPS dirancang agar skema tarif dapat disesuaikan dengan kebutuhan masing-masing pengguna.</p></div></div></details>
+      <details class="reveal"><summary>Apakah ArgoGPS hanya untuk kurir? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Tidak. ArgoGPS juga dapat digunakan oleh driver online, jasa titip, toko, UMKM, dan usaha pengiriman lokal.</p></div></div></details>
+      <details class="reveal"><summary>Apakah riwayat perjalanan tersimpan? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. Riwayat perjalanan dapat disimpan di perangkat sehingga Anda dapat melihat kembali data perjalanan sebelumnya.</p></div></div></details>
+      <details class="reveal"><summary>Apakah saya bisa membuat bukti perjalanan? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. ArgoGPS dapat membuat bukti perjalanan digital yang berisi informasi perjalanan dan rincian biaya.</p></div></div></details>
+      <details class="reveal"><summary>Apakah bukti perjalanan bisa dikirim melalui WhatsApp? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. Bukti perjalanan dapat dibagikan melalui WhatsApp atau aplikasi berbagi lainnya yang tersedia di perangkat Anda.</p></div></div></details>
+      <details class="reveal"><summary>Apakah ArgoGPS membutuhkan GPS? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. GPS diperlukan untuk mengukur jarak perjalanan secara akurat.</p></div></div></details>
+      <details class="reveal"><summary>Apakah ArgoGPS tersedia untuk Android? <span class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="ans"><div class="ans-in"><p>Ya. ArgoGPS tersedia untuk perangkat Android.</p></div></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="sec" id="download" style="padding-bottom:0">
+  <div class="wrap">
+    <div class="final reveal">
+      <h2>Siap Menghitung Ongkir dengan Lebih Mudah?</h2>
+      <p>Ukur jarak, hitung ongkir, dan buat bukti perjalanan dalam satu aplikasi. Mulai gunakan ArgoGPS hari ini.</p>
+      <a class="gp-badge badge-light" href="https://play.google.com/store/apps/details?id=com.bangkurir.argogps" aria-label="Download ArgoGPS di Google Play">
+        <span class="gp-ico"><svg viewBox="0 0 24 24"><path fill="#00D0FF" d="M3.6 2.2C3 2.6 2.6 3.3 2.6 4.2v15.6c0 .9.4 1.6 1 2L12.9 12z"/><path fill="#00E676" d="M12.9 12l3.1-3.1-10.3-6C5 2.3 4.2 2.6 3.6 2.2L12.9 12z"/><path fill="#FFD500" d="M12.9 12l-9.4 9.4c.4.4 1 .6 1.5.5l11.1-6.3L12.9 12z"/><path fill="#FF3B30" d="M19.8 10.2 12.9 7l3.1 5-7.3 4.2 11.1-6.4c1.3-.7 1.3-1.7 0-2.6z"/></svg></span>
+        <span class="gp-txt"><em>GET IT ON</em><strong>Google Play</strong></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="fbrand"><img src="/assets/icon-512.png" alt="">Argo<b>GPS</b></div>
+        <p class="fdesc">ArgoGPS adalah aplikasi yang membantu kurir dan usaha pengiriman mencatat perjalanan, mengukur jarak, menghitung ongkir, dan membuat bukti perjalanan digital dengan lebih mudah.</p>
+        <div class="ftags">Mudah • Praktis • Transparan</div>
+        <div class="fcontact">
+          <a href="mailto:support@argogps.id">support@argogps.id</a>
+        </div>
+      </div>
+      <div>
+        <h4>Tautan</h4>
+        <a class="f-link" href="#download">Download</a>
+        <a class="f-link" href="#fitur">Fitur</a>
+        <a class="f-link" href="#harga">Pricing</a>
+        <a class="f-link" href="#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a class="f-link" href="/privasi.html">Kebijakan Privasi</a>
+        <a class="f-link" href="/syarat.html">Syarat & Ketentuan</a>
+        <a class="f-link" href="/hapus-akun.html">Penghapusan Akun</a>
+      </div>
+    </div>
+    <div class="fbase">
+      <span>© 2026 ArgoGPS. All rights reserved.</span>
+      <span><a href="/privasi.html">Kebijakan Privasi</a> · <a href="/syarat.html">Syarat & Ketentuan</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const burger = document.getElementById('burger');
+  burger.addEventListener('click', () => {
+    const open = document.body.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  document.querySelectorAll('#menu a').forEach(a => a.addEventListener('click', () => {
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12, rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Animated hero counters (ukur jarak 0 -> 12.4km, ongkir 0 -> Rp24.900)
+  function animNum(el, target, isRupiah) {
+    const dur = 1600, start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const v = target * eased;
+      el.textContent = isRupiah ? 'Rp ' + Math.round(v).toLocaleString('id-ID') : v.toFixed(1) + ' km';
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const k = document.getElementById('ctrKm'), r = document.getElementById('ctrRp');
+  if (k && r) setTimeout(() => { animNum(k, 12.4, false); animNum(r, 24900, true); }, 400);
+
+  // APK Slider: slideshow otomatis (ganti gambar, tanpa thumbnail)
+  (function(){
+    const track = document.querySelector('#apkSlider .slider-track');
+    if (!track) return;
+    const slides = [...track.querySelectorAll('.slider-slide')];
+    let cur = 0;
+    function show(i){
+      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
+      cur = i;
+    }
+    setInterval(() => show((cur+1)%slides.length), 3200);
+  })();
+</script>
+</body>
+</html>
