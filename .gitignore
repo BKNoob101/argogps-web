@@ -1,0 +1,29 @@
+# ArgoGPS Web - .gitignore
+
+# Build artifacts & temporary files
+assets/screens/seg_*.mp4
+assets/screens/*.jpg
+_tools/
+*.log
+
+# Preview screenshots (generated, not source)
+preview-*.png
+preview-*.jpg
+
+# Mockup/review pages (not part of production site)
+mockup-*.html
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Video segments (temporary)
+*.mp4
+!argogps-slideshow.mp4
+!argogps-tutorial.mp4
