@@ -3,6 +3,7 @@
 # Build artifacts & temporary files
 assets/screens/seg_*.mp4
 assets/screens/*.jpg
+!assets/screens/*-polished.jpg
 _tools/
 *.log
 
