@@ -220,15 +220,9 @@
   .phone-cap span{color:#169B62;font-size:10px}
 
   /* APK SLIDER */
-  .apk-slider{max-width:360px;margin:0 auto 40px}
-  .slider-main{position:relative}
-  .slider-track{position:relative;aspect-ratio:9/19.5;border-radius:40px;overflow:hidden}
-  .slider-slide{position:absolute;inset:0;opacity:0;transform:translateX(30px) scale(.97);transition:opacity .6s var(--ease),transform .6s var(--ease);pointer-events:none}
-  .slider-slide.active{opacity:1;transform:none;pointer-events:auto}
-  .slider-slide .phone-pic{height:100%;display:flex;flex-direction:column}
-  .slider-slide .phone-pic img{flex:1;object-fit:cover;width:100%;border-radius:29px;background:#F5F0E8}
-  .slide-cap{margin-top:14px;text-align:center;font-size:13.5px;color:var(--brand-deep);font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px}
-  .slide-cap span{color:#169B62;font-size:10px}
+  .apk-photo{max-width:320px;margin:0 auto 40px}
+  .apk-photo-frame{position:relative;border-radius:40px;overflow:hidden;border:3px solid var(--brand-deep);box-shadow:0 8px 32px rgba(38,64,58,.15)}
+  .apk-photo-frame img{display:block;width:100%;aspect-ratio:9/19.5;object-fit:cover;background:#F5F0E8}
   .gal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:8px;align-items:start}
   .gal-item{text-align:center}
   .gal-phone{position:relative;max-width:250px;margin:0 auto;border-radius:28px;background:linear-gradient(160deg,#2b2b2b,#1a1a1a);padding:7px;box-shadow:0 18px 46px rgba(20,37,30,.25),inset 0 0 0 1px rgba(255,255,255,.05)}
@@ -403,29 +397,9 @@
       <span>Ringan</span><span class="sep">•</span><span>Praktis</span><span class="sep">•</span><span>Transparan</span><span class="sep">•</span><span>Bisa Digunakan Offline</span>
     </div>
 
-    <!-- SLIDER APK (slideshow, klik thumbnail utk berhenti & pindah) -->
-    <div class="apk-slider reveal in" id="apkSlider" data-d="3">
-      <div class="slider-main">
-        <div class="slider-track">
-          <div class="slider-slide active">
-            <div class="phone-pic"><img src="assets/screens/home-polished.png" alt="Tampilan utama ArgoGPS — odometer & kalkulator ongkir" loading="lazy"></div>
-            <div class="slide-cap"><span>●</span> Halaman Utama — Odometer & Kalkulator Ongkir</div>
-          </div>
-          <div class="slider-slide">
-            <div class="phone-pic"><img src="assets/screens/tagihan-polished.png" alt="Ringkasan trip dan rincian tagihan ArgoGPS" loading="lazy"></div>
-            <div class="slide-cap"><span>●</span> Tagihan — Ringkasan Trip & Rincian Belanja</div>
-          </div>
-          <div class="slider-slide">
-            <div class="phone-pic"><img src="assets/screens/riwayat-polished.png" alt="Riwayat perjalanan dan total pendapatan ArgoGPS" loading="lazy"></div>
-            <div class="slide-cap"><span>●</span> Riwayat — Total Pendapatan & Daftar Perjalanan</div>
-          </div>
-          <div class="slider-slide">
-            <div class="phone-pic"><img src="assets/screens/setelan-polished.png" alt="Pengaturan profil, tema, tarif, struk, riwayat aplikasi ArgoGPS" loading="lazy"></div>
-            <div class="slide-cap"><span>●</span> Pengaturan — Profil, Tema, Tarif & Struk</div>
-          </div>
-        </div>
-      </div>
-      <!-- Hanya 1 tampilan besar, slideshow ganti otomatis -->
+    <!-- 1 GAMBAR APK -->
+    <div class="apk-photo reveal in" data-d="3">
+      <div class="apk-photo-frame"><img src="assets/screens/home-polished.png" alt="Tampilan utama ArgoGPS — odometer & kalkulator ongkir" loading="lazy"></div>
     </div>
 
     <div class="hero-cta reveal in" data-d="4">
@@ -683,19 +657,6 @@
   }
   const k = document.getElementById('ctrKm'), r = document.getElementById('ctrRp');
   if (k && r) setTimeout(() => { animNum(k, 12.4, false); animNum(r, 24900, true); }, 400);
-
-  // APK Slider: slideshow otomatis (ganti gambar, tanpa thumbnail)
-  (function(){
-    const track = document.querySelector('#apkSlider .slider-track');
-    if (!track) return;
-    const slides = [...track.querySelectorAll('.slider-slide')];
-    let cur = 0;
-    function show(i){
-      slides.forEach((s,idx)=>s.classList.toggle('active', idx===i));
-      cur = i;
-    }
-    setInterval(() => show((cur+1)%slides.length), 3200);
-  })();
 </script>
 </body>
 </html>
